@@ -26,6 +26,7 @@ export const GetOneYan = () =>{
     return OneYan({
         method:"get"
     })
+  
 }
 
 export const GetWeather= () =>{

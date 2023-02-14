@@ -1,5 +1,6 @@
 
-import { SendGroupMes, GetOneYan } from './api'
+import { SendGroupMes, GetOneYan,GetWeather } from './api'
+import { ZhiriMap,daymap } from './Map'
 //定义口令列表
 const CommandList = new Map<string, CommandKeys>()
 CommandList.set("/天气", 'Tianqi')
@@ -11,7 +12,11 @@ function MessageTokey(Message: string) {
 //定义指令列表
 const Command = {
     Tianqi() {
-        console.log("发送天气");
+        GetWeather().then(res=>{
+            let WeatherDetail  = res.data.result.realtime
+            let WeatherMes:string = '南阳理工实况天气：' + daymap.get(WeatherDetail.skycon) +"。\r\n实时摄氏度：" + WeatherDetail.temperature +'℃。\r\n最近的降水带距离我们：' + WeatherDetail.precipitation.nearest.distance +'公里。'
+            SendGroupMes(MessageDetail.senderid,WeatherMes)
+        })
     },
     OneYan() {
         GetOneYan().then(res => {
@@ -19,14 +24,7 @@ const Command = {
         })
     },
     Zhiri() {
-        let ZhiriMap = new Map<number,number[]>()
-        ZhiriMap.set(1, [2795862836])
-        ZhiriMap.set(2, [2847277478])
-        ZhiriMap.set(3, [3314242197, 2752139375])
-        ZhiriMap.set(4, [2602917073])
-        ZhiriMap.set(5, [3347232725, 3337653569])
-        ZhiriMap.set(6, [1978678141, 2753865017])
-        ZhiriMap.set(0, [3327628883, 3110463787])
+       
         let days = new Date().getDay()
         let mes:string = ''
         let persons:number[] = ZhiriMap.get(days)!
